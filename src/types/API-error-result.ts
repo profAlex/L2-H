@@ -3,4 +3,4 @@ export type FieldError = {
     field: string | null;
 };
 
-
+export type APIErrorResult = { errorMessages: FieldError[] | null };
