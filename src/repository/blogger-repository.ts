@@ -81,8 +81,11 @@ const generateCombinedId = () => {
 
 export const dataRepository = {
 
+    // *****************************
     // методы для управления блогами
-    findAllBlogs(): BlogViewModel[] {
+    // *****************************
+
+    getAllBlogs(): BlogViewModel[] {
         return nonDisclosableDatabase.bloggerRepository.map(({ bloggerInfo }) => ({
             id: bloggerInfo.id,
             name: bloggerInfo.name,
@@ -107,8 +110,8 @@ export const dataRepository = {
         return newBlogEntry;
     },
 
-    findSingleBlog(id: string): BlogViewModel | undefined {
-        const blogger = nonDisclosableDatabase.bloggerRepository.find((blogger) => blogger.bloggerInfo.id === id);
+    findSingleBlog(blogId: string): BlogViewModel | undefined {
+        const blogger = nonDisclosableDatabase.bloggerRepository.find((blogger) => blogger.bloggerInfo.id === blogId);
 
         if(blogger)
         {
@@ -159,6 +162,93 @@ export const dataRepository = {
             nonDisclosableDatabase.bloggerRepository.splice(blogIndex, 1);
 
             return null;
+        }
+
+        return undefined;
+    },
+
+    // *****************************
+    // методы для управления постами
+    // *****************************
+    getAllPosts(): PostViewModel[] | []{
+        return nonDisclosableDatabase.bloggerRepository.flatMap((element: bloggerRawData):PostViewModel[] | [] => (element.bloggerPosts ?? []));
+    },
+
+
+    createNewPost(newPost: PostInputModel): PostViewModel | undefined {
+
+        let blogName = this.findSingleBlog(newPost.blogId)?.name;
+        if (!blogName)
+        {
+            return undefined;
+        }
+
+        const blogIndex = nonDisclosableDatabase.bloggerRepository.findIndex(
+            (blogger) => blogger.bloggerInfo.id === newPost.blogId
+        );
+
+        const newPostEntry = {
+            ...newPost,
+            id: generateCombinedId(),
+            blogName: blogName,
+        };
+
+        nonDisclosableDatabase.bloggerRepository[blogIndex].bloggerPosts?.push(newPostEntry);
+
+        return newPostEntry;
+    },
+
+    findSinglePost(postId: string): PostViewModel | undefined {
+        for (const blogger of nonDisclosableDatabase.bloggerRepository) {
+            if (!blogger.bloggerPosts) continue;
+            for(const post of blogger.bloggerPosts)
+            {
+                if(post.id === postId)
+                    return post;
+            }
+        }
+        return undefined;
+    },
+
+    updatePost(postId: string, newData: PostInputModel): null | undefined {
+        //const post = this.findSinglePost(id);
+        const blogger = nonDisclosableDatabase.bloggerRepository.find((blogger) => blogger.bloggerInfo.id === newData.blogId);
+
+        if(blogger && blogger.bloggerPosts)
+        {
+            let blogIndex = nonDisclosableDatabase.bloggerRepository.indexOf(blogger);
+            let post = this.findSinglePost(postId);
+
+            if(blogIndex !== -1 && post) {
+                let postIndex = blogger.bloggerPosts.indexOf(post);
+
+                if(postIndex !== -1)
+                {
+                    const updatedPost: PostViewModel = {
+                        id: post.id,
+                        blogName: post.blogName,
+                        ...newData
+                    };
+
+                    // Создаем новый массив постов с обновленным постом
+                    const updatedPosts = [
+                        ...blogger.bloggerPosts.slice(0, postIndex),
+                        updatedPost,
+                        ...blogger.bloggerPosts.slice(postIndex + 1)
+                    ];
+
+                    // Создаем обновленную запись блоггера
+                    const updatedBlogEntry: bloggerRawData = {
+                        ...blogger,
+                        bloggerPosts: updatedPosts
+                    };
+
+
+                        nonDisclosableDatabase.bloggerRepository[blogIndex] = updatedBlogEntry;
+                    //post = {id: post.id, blogName: post.blogName, ...newData};
+                    return null;
+                }
+            }
         }
 
         return undefined;

@@ -59,8 +59,10 @@ const generateCombinedId = () => {
     return `${timestamp}-${random}`;
 };
 exports.dataRepository = {
+    // *****************************
     // методы для управления блогами
-    findAllBlogs() {
+    // *****************************
+    getAllBlogs() {
         return nonDisclosableDatabase.bloggerRepository.map(({ bloggerInfo }) => ({
             id: bloggerInfo.id,
             name: bloggerInfo.name,
@@ -77,8 +79,8 @@ exports.dataRepository = {
         nonDisclosableDatabase.bloggerRepository.push(newDatabaseEntry);
         return newBlogEntry;
     },
-    findSingleBlog(id) {
-        const blogger = nonDisclosableDatabase.bloggerRepository.find((blogger) => blogger.bloggerInfo.id === id);
+    findSingleBlog(blogId) {
+        const blogger = nonDisclosableDatabase.bloggerRepository.find((blogger) => blogger.bloggerInfo.id === blogId);
         if (blogger) {
             const foundBlogger = {
                 id: blogger.bloggerInfo.id,
@@ -111,6 +113,60 @@ exports.dataRepository = {
             let blogIndex = nonDisclosableDatabase.bloggerRepository.indexOf(blogger);
             nonDisclosableDatabase.bloggerRepository.splice(blogIndex, 1);
             return null;
+        }
+        return undefined;
+    },
+    // *****************************
+    // методы для управления постами
+    // *****************************
+    getAllPosts() {
+        return nonDisclosableDatabase.bloggerRepository.flatMap((element) => { var _a; return ((_a = element.bloggerPosts) !== null && _a !== void 0 ? _a : []); });
+    },
+    createNewPost(newPost) {
+        var _a, _b;
+        let blogName = (_a = this.findSingleBlog(newPost.blogId)) === null || _a === void 0 ? void 0 : _a.name;
+        if (!blogName) {
+            return undefined;
+        }
+        const blogIndex = nonDisclosableDatabase.bloggerRepository.findIndex((blogger) => blogger.bloggerInfo.id === newPost.blogId);
+        const newPostEntry = Object.assign(Object.assign({}, newPost), { id: generateCombinedId(), blogName: blogName });
+        (_b = nonDisclosableDatabase.bloggerRepository[blogIndex].bloggerPosts) === null || _b === void 0 ? void 0 : _b.push(newPostEntry);
+        return newPostEntry;
+    },
+    findSinglePost(postId) {
+        for (const blogger of nonDisclosableDatabase.bloggerRepository) {
+            if (!blogger.bloggerPosts)
+                continue;
+            for (const post of blogger.bloggerPosts) {
+                if (post.id === postId)
+                    return post;
+            }
+        }
+        return undefined;
+    },
+    updatePost(postId, newData) {
+        //const post = this.findSinglePost(id);
+        const blogger = nonDisclosableDatabase.bloggerRepository.find((blogger) => blogger.bloggerInfo.id === newData.blogId);
+        if (blogger && blogger.bloggerPosts) {
+            let blogIndex = nonDisclosableDatabase.bloggerRepository.indexOf(blogger);
+            let post = this.findSinglePost(postId);
+            if (blogIndex !== -1 && post) {
+                let postIndex = blogger.bloggerPosts.indexOf(post);
+                if (postIndex !== -1) {
+                    const updatedPost = Object.assign({ id: post.id, blogName: post.blogName }, newData);
+                    // Создаем новый массив постов с обновленным постом
+                    const updatedPosts = [
+                        ...blogger.bloggerPosts.slice(0, postIndex),
+                        updatedPost,
+                        ...blogger.bloggerPosts.slice(postIndex + 1)
+                    ];
+                    // Создаем обновленную запись блоггера
+                    const updatedBlogEntry = Object.assign(Object.assign({}, blogger), { bloggerPosts: updatedPosts });
+                    nonDisclosableDatabase.bloggerRepository[blogIndex] = updatedBlogEntry;
+                    //post = {id: post.id, blogName: post.blogName, ...newData};
+                    return null;
+                }
+            }
         }
         return undefined;
     }
