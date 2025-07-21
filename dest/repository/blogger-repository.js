@@ -92,8 +92,8 @@ exports.dataRepository = {
         }
         return undefined;
     },
-    updateBlog(id, newData) {
-        const blogger = nonDisclosableDatabase.bloggerRepository.find((blogger) => blogger.bloggerInfo.id === id);
+    updateBlog(blogId, newData) {
+        const blogger = nonDisclosableDatabase.bloggerRepository.find((blogger) => blogger.bloggerInfo.id === blogId);
         if (blogger) {
             let blogIndex = nonDisclosableDatabase.bloggerRepository.indexOf(blogger);
             const updatedBlogger = Object.assign(Object.assign({}, blogger), { bloggerInfo: {
@@ -107,8 +107,8 @@ exports.dataRepository = {
         }
         return undefined;
     },
-    deleteBlog(id) {
-        const blogger = nonDisclosableDatabase.bloggerRepository.find((blogger) => blogger.bloggerInfo.id === id);
+    deleteBlog(blogId) {
+        const blogger = nonDisclosableDatabase.bloggerRepository.find((blogger) => blogger.bloggerInfo.id === blogId);
         if (blogger) {
             let blogIndex = nonDisclosableDatabase.bloggerRepository.indexOf(blogger);
             nonDisclosableDatabase.bloggerRepository.splice(blogIndex, 1);
@@ -163,11 +163,30 @@ exports.dataRepository = {
                     // Создаем обновленную запись блоггера
                     const updatedBlogEntry = Object.assign(Object.assign({}, blogger), { bloggerPosts: updatedPosts });
                     nonDisclosableDatabase.bloggerRepository[blogIndex] = updatedBlogEntry;
-                    //post = {id: post.id, blogName: post.blogName, ...newData};
                     return null;
                 }
             }
         }
         return undefined;
+    },
+    deletePost(postId) {
+        var _a;
+        const blogger = nonDisclosableDatabase.bloggerRepository.find((blogger) => blogger.bloggerInfo.id === postId);
+        if (blogger && blogger.bloggerPosts) {
+            let blogIndex = nonDisclosableDatabase.bloggerRepository.indexOf(blogger);
+            let post = this.findSinglePost(postId);
+            if (blogIndex !== -1 && post) {
+                let postIndex = blogger.bloggerPosts.indexOf(post);
+                (_a = nonDisclosableDatabase.bloggerRepository[blogIndex].bloggerPosts) === null || _a === void 0 ? void 0 : _a.splice(postIndex, 1);
+                return null;
+            }
+        }
+        return undefined;
+    },
+    // *****************************
+    // метод для тестов
+    // *****************************
+    deleteAllBloggers() {
+        nonDisclosableDatabase.bloggerRepository = [];
     }
 };

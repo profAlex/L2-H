@@ -128,8 +128,8 @@ export const dataRepository = {
         return undefined;
     },
 
-    updateBlog(id: string, newData: BlogInputModel): null | undefined {
-        const blogger = nonDisclosableDatabase.bloggerRepository.find((blogger) => blogger.bloggerInfo.id === id);
+    updateBlog(blogId: string, newData: BlogInputModel): null | undefined {
+        const blogger = nonDisclosableDatabase.bloggerRepository.find((blogger) => blogger.bloggerInfo.id === blogId);
 
         if(blogger)
         {
@@ -153,8 +153,8 @@ export const dataRepository = {
         return undefined;
     },
 
-    deleteBlog(id: string): null | undefined {
-        const blogger = nonDisclosableDatabase.bloggerRepository.find((blogger) => blogger.bloggerInfo.id === id);
+    deleteBlog(blogId: string): null | undefined {
+        const blogger = nonDisclosableDatabase.bloggerRepository.find((blogger) => blogger.bloggerInfo.id === blogId);
 
         if(blogger)
         {
@@ -245,12 +245,37 @@ export const dataRepository = {
 
 
                         nonDisclosableDatabase.bloggerRepository[blogIndex] = updatedBlogEntry;
-                    //post = {id: post.id, blogName: post.blogName, ...newData};
                     return null;
                 }
             }
         }
 
         return undefined;
+    },
+
+    deletePost(postId: string): null | undefined {
+        const blogger = nonDisclosableDatabase.bloggerRepository.find((blogger) => blogger.bloggerInfo.id === postId);
+
+        if(blogger && blogger.bloggerPosts)
+        {
+            let blogIndex = nonDisclosableDatabase.bloggerRepository.indexOf(blogger);
+            let post = this.findSinglePost(postId);
+
+            if(blogIndex !== -1 && post) {
+                let postIndex = blogger.bloggerPosts.indexOf(post);
+                nonDisclosableDatabase.bloggerRepository[blogIndex].bloggerPosts?.splice(postIndex,1);
+
+                return null;
+            }
+        }
+
+        return undefined;
+    },
+
+    // *****************************
+    // метод для тестов
+    // *****************************
+    deleteAllBloggers() {
+        nonDisclosableDatabase.bloggerRepository = [];
     }
 }
