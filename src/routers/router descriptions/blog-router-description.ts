@@ -19,4 +19,26 @@ export const findSingleBlog = (req: Request, res: Response) => {
     }
 
     res.status(HttpStatus.Ok).json(result);
-}
+};
+
+export const updateBlog = (req: Request, res: Response) => {
+    const result = dataRepository.updateBlog(req.params.id, req.body);
+
+    if(result === undefined)
+    {
+        res.sendStatus(HttpStatus.NotFound);
+    }
+
+    res.sendStatus(HttpStatus.Created);
+};
+
+export const deleteBlog = (req: Request, res: Response) => {
+    const result = dataRepository.deleteBlog(req.params.id);
+
+    if(result === undefined)
+    {
+        res.sendStatus(HttpStatus.NotFound);
+    }
+
+    res.sendStatus(HttpStatus.NoContent);
+};

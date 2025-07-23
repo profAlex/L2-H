@@ -6,7 +6,7 @@ import {BLOGS_PATH, TESTING_PATH} from "../src/routers/router-pathes";
 import {dataRepository} from "../src/repository/blogger-repository";
 import {HttpStatus} from "../src/core/http-statuses";
 
-describe("Test API", () =>{
+describe("Test API for managing blogs(bloggers)", () =>{
 
     // preliminary part of tests, creating correct and incorrect data for future
 
@@ -42,6 +42,8 @@ describe("Test API", () =>{
     });
 
     it("POST '/api/blogs/' - should add a blog to the repository", async() => {
+        expect(dataRepository.returnLength()).toBe(2);
+
         const res = await request(testApp).post(`${BLOGS_PATH}/`).send(correctBlogInput);
         expect(dataRepository.returnLength()).toBe(3);
 
@@ -59,7 +61,6 @@ describe("Test API", () =>{
     });
 
     it("GET '/api/blogs/{id}' - should respond with a BlogViewModel-formatted info about a requested blog", async() => {
-
         expect(dataRepository.returnLength()).toBe(3);
 
         const res = await request(testApp).get(`${BLOGS_PATH}/001`);
@@ -75,4 +76,43 @@ describe("Test API", () =>{
         expect(res.status).toBe(HttpStatus.Ok);
     });
 
-})
+    it("PUT '/api/blogs/{id}' - should update a blog", async() => {
+        expect(dataRepository.returnLength()).toBe(3);
+
+        const updatedBlogInput: BlogInputModel = {
+            name: "updated name",
+            description: "updated description",
+            websiteUrl: "updated websiteUrl"
+        };
+
+        const res = await request(testApp).put(`${BLOGS_PATH}/001`).send(updatedBlogInput);
+        expect(dataRepository.returnLength()).toBe(3);
+        expect(res.status).toBe(HttpStatus.Created);
+
+        const anotherResults = await request(testApp).get(`${BLOGS_PATH}/001`);
+        expect(anotherResults.status).toBe(HttpStatus.Ok);
+        expect(anotherResults).toBeDefined();
+        expect(anotherResults.body).toHaveProperty('id', '001');
+        expect(anotherResults.body).toHaveProperty('name', 'updated name');
+        expect(anotherResults.body).toHaveProperty('description', 'updated description');
+        expect(anotherResults.body).toHaveProperty('websiteUrl', 'updated websiteUrl');
+    });
+
+    it("DELETE '/api/blogs/{id}' - should delete a blog", async() => {
+        expect(dataRepository.returnLength()).toBe(3);
+
+        const res = await request(testApp).delete(`${BLOGS_PATH}/001`);
+
+        expect(dataRepository.returnLength()).toBe(2);
+
+        const anotherResults = await request(testApp).get(`${BLOGS_PATH}/001`);
+        expect(anotherResults.status).toBe(HttpStatus.NotFound);
+
+    });
+
+});
+
+
+describe("Test API for managing post inside blogs", () =>{
+
+});

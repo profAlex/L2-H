@@ -124,7 +124,7 @@ export const dataRepository = {
                 websiteUrl: blogger.bloggerInfo.websiteUrl
             }
 
-            console.log("ID inside finding function:", foundBlogger.id);
+            // console.log("ID inside finding function:", foundBlogger.id);
 
             return foundBlogger;
         }
