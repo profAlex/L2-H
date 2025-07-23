@@ -100,6 +100,7 @@ export const dataRepository = {
             ...newBlog
         };
 
+
         const newDatabaseEntry: bloggerRawData = {
             bloggerInfo: newBlogEntry,
             bloggerPosts: []
@@ -107,6 +108,7 @@ export const dataRepository = {
 
         nonDisclosableDatabase.bloggerRepository.push(newDatabaseEntry);
 
+        // console.log("ID Inside repository: ",newBlogEntry.id);
         return newBlogEntry;
     },
 
@@ -121,6 +123,8 @@ export const dataRepository = {
                 description: blogger.bloggerInfo.description,
                 websiteUrl: blogger.bloggerInfo.websiteUrl
             }
+
+            console.log("ID inside finding function:", foundBlogger.id);
 
             return foundBlogger;
         }
@@ -277,5 +281,9 @@ export const dataRepository = {
     // *****************************
     deleteAllBloggers() {
         nonDisclosableDatabase.bloggerRepository = [];
+    },
+
+    returnLength() {
+        return nonDisclosableDatabase.bloggerRepository.length;
     }
 }
