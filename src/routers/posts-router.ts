@@ -1,9 +1,16 @@
 import {Request, Response, Router} from 'express';
+import {
+    createNewPost,
+    deletePost,
+    findSinglePost,
+    getAllPosts,
+    updatePost
+} from "./router descriptions/post-router-description";
 
 export const postsRouter = Router();
 
-postsRouter.get('/', (req: Request, res: Response) => {})
-postsRouter.post('/', (req: Request, res: Response) => {}) //auth guarded
-postsRouter.get('/:id', (req: Request, res: Response) => {})
-postsRouter.put('/:id', (req: Request, res: Response) => {}) //auth guarded
-postsRouter.delete('/:id', (req: Request, res: Response) => {}) //auth guarded
+postsRouter.get('/', getAllPosts);
+postsRouter.post('/', createNewPost); //auth guarded
+postsRouter.get('/:id', findSinglePost);
+postsRouter.put('/:id', updatePost); //auth guarded
+postsRouter.delete('/:id', deletePost) //auth guarded

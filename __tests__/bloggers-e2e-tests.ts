@@ -22,15 +22,7 @@ describe("Test API for managing blogs(bloggers)", () =>{
 
 
 
-    // beforeAll(async () => {
-    //     // console.log("Repository entries: ", dataRepository.returnLength());
-    //
-    //     const res = await request(testApp).delete(`${TESTING_PATH}/all-data/`);
-    //     expect(dataRepository.returnLength()).toBe(0);
-    //
-    //     // console.log("Repository entries: ", dataRepository.returnLength());
-    //     expect(res.status).toBe(HttpStatus.NoContent);
-    // })
+
 
     it("GET '/api/blogs/' - should respond with a list of bloggers (2 entries total)", async() => {
         const res = await request(testApp).get(`${BLOGS_PATH}/`);
@@ -87,7 +79,7 @@ describe("Test API for managing blogs(bloggers)", () =>{
 
         const res = await request(testApp).put(`${BLOGS_PATH}/001`).send(updatedBlogInput);
         expect(dataRepository.returnLength()).toBe(3);
-        expect(res.status).toBe(HttpStatus.Created);
+        expect(res.status).toBe(HttpStatus.NoContent);
 
         const anotherResults = await request(testApp).get(`${BLOGS_PATH}/001`);
         expect(anotherResults.status).toBe(HttpStatus.Ok);
@@ -110,8 +102,23 @@ describe("Test API for managing blogs(bloggers)", () =>{
 
     });
 
+
+
 });
 
+
+describe("Test API for testing router", () => {
+    it("DELETE ALL '/api/testing/all-data/' - should delete whole repository", async() => {
+        const testApp = express();
+        setupApp(testApp);
+
+        expect(dataRepository.returnLength()).toBe(2);
+        const res = await request(testApp).delete(`${TESTING_PATH}/all-data/`);
+        expect(dataRepository.returnLength()).toBe(0);
+
+        expect(res.status).toBe(HttpStatus.NoContent);
+    });
+});
 
 describe("Test API for managing post inside blogs", () =>{
 

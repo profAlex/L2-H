@@ -29,7 +29,7 @@ export const updateBlog = (req: Request, res: Response) => {
         res.sendStatus(HttpStatus.NotFound);
     }
 
-    res.sendStatus(HttpStatus.Created);
+    res.sendStatus(HttpStatus.NoContent);
 };
 
 export const deleteBlog = (req: Request, res: Response) => {

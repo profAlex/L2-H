@@ -12,13 +12,9 @@ import {
 export const blogsRouter = Router();
 
 blogsRouter.get('/', getAllBlogs);
-
 blogsRouter.post('/', createNewBlog); //auth guarded
-
 blogsRouter.get('/:id', findSingleBlog);
-
 blogsRouter.put('/:id', updateBlog); //auth guarded
-
 blogsRouter.delete('/:id', deleteBlog); //auth guarded
 
 
