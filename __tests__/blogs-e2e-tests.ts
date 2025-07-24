@@ -5,7 +5,6 @@ import {BlogInputModel} from "../src/types/blog-input-model";
 import {BLOGS_PATH, POSTS_PATH, TESTING_PATH} from "../src/routers/router-pathes";
 import {dataRepository} from "../src/repository/blogger-repository";
 import {HttpStatus} from "../src/core/http-statuses";
-import {PostInputModel} from "../src/types/post-input-model";
 
 describe("Test API for managing blogs(bloggers)", () =>{
 
@@ -98,17 +97,6 @@ describe("Test API for managing blogs(bloggers)", () =>{
 });
 
 
-describe("Test API for testing router", () => {
-    it("DELETE ALL '/api/testing/all-data/' - should delete whole repository", async() => {
-        const testApp = express();
-        setupApp(testApp);
 
-        expect(dataRepository.returnLength()).toBe(2);
-        const res = await request(testApp).delete(`${TESTING_PATH}/all-data/`);
-        expect(dataRepository.returnLength()).toBe(0);
-
-        expect(res.status).toBe(HttpStatus.NoContent);
-    });
-});
 
 

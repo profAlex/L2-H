@@ -24,20 +24,15 @@ describe("Test API for managing post inside blogs", () =>{
         const res = await request(testApp).get(`${POSTS_PATH}/`);
 
         const entriesCount = Object.entries(res.body).length;
-        console.log(entriesCount);
-
         expect(entriesCount).toBe(4);
 
         expect(res.status).toBe(HttpStatus.Ok);
     });
 
     it("POST '/api/posts/' - should add a post to the repository", async() => {
-        //expect(dataRepository.returnLength()).toBe(2);
 
         const res = await request(testApp).post(`${POSTS_PATH}/`).send(correctPostInput);
-        //expect(dataRepository.returnLength()).toBe(5);
 
-        // console.log(res.body);
         const propertyCount = Object.keys(res.body).length;
         expect(propertyCount).toBe(6);
 
@@ -57,7 +52,6 @@ describe("Test API for managing post inside blogs", () =>{
     });
 
     it("GET '/api/posts/{id}' - should respond with a PostViewModel-formatted info about a requested post", async() => {
-        //expect(dataRepository.returnLength()).toBe(3);
 
         const res = await request(testApp).get(`${POSTS_PATH}/002_001`);
 
@@ -75,7 +69,6 @@ describe("Test API for managing post inside blogs", () =>{
     });
 
     it("PUT '/api/posts/{id}' - should update a post", async() => {
-        //expect(dataRepository.returnLength()).toBe(3);
 
         const updatedPostInput: PostInputModel = {
             title: "post blog 001",
@@ -85,7 +78,6 @@ describe("Test API for managing post inside blogs", () =>{
         };
 
         const res = await request(testApp).put(`${POSTS_PATH}/002_001`).send(updatedPostInput);
-        //expect(dataRepository.returnLength()).toBe(3);
         expect(res.status).toBe(HttpStatus.NoContent);
 
         const anotherResults = await request(testApp).get(`${POSTS_PATH}/002_001`);

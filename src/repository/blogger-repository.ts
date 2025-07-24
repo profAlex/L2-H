@@ -258,12 +258,18 @@ export const dataRepository = {
     },
 
     deletePost(postId: string): null | undefined {
-        const blogger = nonDisclosableDatabase.bloggerRepository.find((blogger) => blogger.bloggerInfo.id === postId);
+        const post = this.findSinglePost(postId);
+        if(!post)
+        {
+            return undefined;
+        }
+
+        const blogIdFromPost = post.blogId;
+        const blogger = nonDisclosableDatabase.bloggerRepository.find((blogger) => blogger.bloggerInfo.id === blogIdFromPost);
 
         if(blogger && blogger.bloggerPosts)
         {
             let blogIndex = nonDisclosableDatabase.bloggerRepository.indexOf(blogger);
-            let post = this.findSinglePost(postId);
 
             if(blogIndex !== -1 && post) {
                 let postIndex = blogger.bloggerPosts.indexOf(post);
@@ -277,7 +283,7 @@ export const dataRepository = {
     },
 
     // *****************************
-    // метод для тестов
+    // методы для тестов
     // *****************************
     deleteAllBloggers() {
         nonDisclosableDatabase.bloggerRepository = [];
