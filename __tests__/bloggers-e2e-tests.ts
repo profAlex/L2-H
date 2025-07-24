@@ -2,13 +2,12 @@ import request from 'supertest';
 import express from "express";
 import {setupApp} from "../src/setup-app";
 import {BlogInputModel} from "../src/types/blog-input-model";
-import {BLOGS_PATH, TESTING_PATH} from "../src/routers/router-pathes";
+import {BLOGS_PATH, POSTS_PATH, TESTING_PATH} from "../src/routers/router-pathes";
 import {dataRepository} from "../src/repository/blogger-repository";
 import {HttpStatus} from "../src/core/http-statuses";
+import {PostInputModel} from "../src/types/post-input-model";
 
 describe("Test API for managing blogs(bloggers)", () =>{
-
-    // preliminary part of tests, creating correct and incorrect data for future
 
     const testApp = express();
     setupApp(testApp);
@@ -18,11 +17,6 @@ describe("Test API for managing blogs(bloggers)", () =>{
         description: "norm takoy blog",
         websiteUrl: "https://mi-obrecheni.herokuapp.com/",
     };
-    //console.log(dataRepository.returnLength());
-
-
-
-
 
     it("GET '/api/blogs/' - should respond with a list of bloggers (2 entries total)", async() => {
         const res = await request(testApp).get(`${BLOGS_PATH}/`);
@@ -99,10 +93,7 @@ describe("Test API for managing blogs(bloggers)", () =>{
 
         const anotherResults = await request(testApp).get(`${BLOGS_PATH}/001`);
         expect(anotherResults.status).toBe(HttpStatus.NotFound);
-
     });
-
-
 
 });
 
@@ -120,6 +111,4 @@ describe("Test API for testing router", () => {
     });
 });
 
-describe("Test API for managing post inside blogs", () =>{
 
-});
