@@ -2,7 +2,7 @@ import request from 'supertest';
 import express from "express";
 import {setupApp} from "../src/setup-app";
 import {BlogInputModel} from "../src/types/blog-input-model";
-import {BLOGS_PATH, POSTS_PATH, TESTING_PATH} from "../src/routers/router-pathes";
+import {BLOGS_PATH} from "../src/routers/router-pathes";
 import {dataRepository} from "../src/repository/blogger-repository";
 import {HttpStatus} from "../src/core/http-statuses";
 
@@ -61,13 +61,29 @@ describe("Test API for managing blogs(bloggers)", () =>{
         expect(res.status).toBe(HttpStatus.Ok);
     });
 
-    it("PUT '/api/blogs/{id}' - should update a blog", async() => {
+    // it("GET '/api/blogs/{id}' - shouldn't find anything because of non-existing id", async() => {
+    //     // expect(dataRepository.returnLength()).toBe(3);
+    //     //
+    //     // const res = await request(testApp).get(`${BLOGS_PATH}/001`);
+    //     //
+    //     // const propertyCount = Object.keys(res.body).length;
+    //     // expect(propertyCount).toBe(4);
+    //     //
+    //     // expect(res.body).toHaveProperty('id', '001');
+    //     // expect(res.body).toHaveProperty('name', 'blogger_001');
+    //     // expect(res.body).toHaveProperty('description', 'takoy sebe blogger...');
+    //     // expect(res.body).toHaveProperty('websiteUrl', 'https://takoy.blogger.com');
+    //     //
+    //     // expect(res.status).toBe(HttpStatus.Ok);
+    // });
+
+    it("PUT '/api/blogs/{id}' - should correctly update a blog", async() => {
         expect(dataRepository.returnLength()).toBe(3);
 
         const updatedBlogInput: BlogInputModel = {
             name: "updated name",
             description: "updated description",
-            websiteUrl: "updated websiteUrl"
+            websiteUrl: "https://takoy.blogger.com"
         };
 
         const res = await request(testApp).put(`${BLOGS_PATH}/001`).send(updatedBlogInput);
@@ -80,7 +96,29 @@ describe("Test API for managing blogs(bloggers)", () =>{
         expect(anotherResults.body).toHaveProperty('id', '001');
         expect(anotherResults.body).toHaveProperty('name', 'updated name');
         expect(anotherResults.body).toHaveProperty('description', 'updated description');
-        expect(anotherResults.body).toHaveProperty('websiteUrl', 'updated websiteUrl');
+        expect(anotherResults.body).toHaveProperty('websiteUrl', 'https://takoy.blogger.com');
+    });
+
+    it("PUT '/api/blogs/{id}' - should give a proper error message to a non-existing id", async() => {
+        expect(dataRepository.returnLength()).toBe(3);
+
+        const updatedBlogInput: BlogInputModel = {
+            name: "updated name",
+            description: "updated description",
+            websiteUrl: "https://takoy.blogger.com"
+        };
+
+        const res = await request(testApp).put(`${BLOGS_PATH}/0000`).send(updatedBlogInput);
+        expect(dataRepository.returnLength()).toBe(3);
+        expect(res.status).toBe(HttpStatus.NotFound);
+
+        // const anotherResults = await request(testApp).get(`${BLOGS_PATH}/001`);
+        // expect(anotherResults.status).toBe(HttpStatus.Ok);
+        // expect(anotherResults).toBeDefined();
+        // expect(anotherResults.body).toHaveProperty('id', '001');
+        // expect(anotherResults.body).toHaveProperty('name', 'updated name');
+        // expect(anotherResults.body).toHaveProperty('description', 'updated description');
+        // expect(anotherResults.body).toHaveProperty('websiteUrl', 'updated websiteUrl');
     });
 
     it("DELETE '/api/blogs/{id}' - should delete a blog", async() => {

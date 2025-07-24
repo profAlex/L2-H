@@ -1,7 +1,7 @@
 import {body} from "express-validator";
 
 const keyParamsAmountValidation = body().custom((bodyData)=>{
-    return Object.keys(bodyData).length === 3;
+    return Object.keys(bodyData).length === 4;
 }).withMessage("Amount of parameters of input post entry is not sufficient or exceeds the required amount")
 
 const titleValidation = body("title")

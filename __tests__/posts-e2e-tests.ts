@@ -34,6 +34,9 @@ describe("Test API for managing post inside blogs", () =>{
         const res = await request(testApp).post(`${POSTS_PATH}/`).send(correctPostInput);
 
         const propertyCount = Object.keys(res.body).length;
+
+        console.log("FOR DEBUGGING: ", res.body);
+
         expect(propertyCount).toBe(6);
 
         expect(res.body.id).toBeDefined();

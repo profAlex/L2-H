@@ -9,14 +9,17 @@ import {
     updateBlog
 } from "./router descriptions/blog-router-description";
 import {blogInputModelValidation} from "../validation/BlogInputModel-validation-middleware";
+import {inputErrorManagementMiddleware} from "../validation/error-management-validation-middleware";
+import {inputIdValidation} from "../validation/id-input-validation-middleware";
 
 export const blogsRouter = Router();
 
 blogsRouter.get('/', getAllBlogs);
-blogsRouter.post('/', blogInputModelValidation, createNewBlog); //auth guarded
-blogsRouter.get('/:id', findSingleBlog);
-blogsRouter.put('/:id', blogInputModelValidation, updateBlog); //auth guarded
-blogsRouter.delete('/:id', deleteBlog); //auth guarded
+blogsRouter.post('/', blogInputModelValidation, inputErrorManagementMiddleware, createNewBlog); //auth guarded
+blogsRouter.get('/:id', inputIdValidation, inputErrorManagementMiddleware, findSingleBlog);
+// inputErrorManagementMiddleware два раза или один? проверить!
+blogsRouter.put('/:id', inputIdValidation, inputErrorManagementMiddleware, blogInputModelValidation, inputErrorManagementMiddleware, updateBlog); //auth guarded
+blogsRouter.delete('/:id', inputIdValidation, inputErrorManagementMiddleware, deleteBlog); //auth guarded
 
 
 

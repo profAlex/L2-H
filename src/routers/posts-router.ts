@@ -7,11 +7,14 @@ import {
     updatePost
 } from "./router descriptions/post-router-description";
 import {postInputModelValidation} from "../validation/PostInputModel-validation-middleware";
+import {inputErrorManagementMiddleware} from "../validation/error-management-validation-middleware";
+import {inputIdValidation} from "../validation/id-input-validation-middleware";
 
 export const postsRouter = Router();
 
 postsRouter.get('/', getAllPosts);
-postsRouter.post('/', postInputModelValidation, createNewPost); //auth guarded
-postsRouter.get('/:id', findSinglePost);
-postsRouter.put('/:id', postInputModelValidation, updatePost); //auth guarded
-postsRouter.delete('/:id', deletePost) //auth guarded
+postsRouter.post('/', postInputModelValidation, inputErrorManagementMiddleware, createNewPost); //auth guarded
+postsRouter.get('/:id', inputIdValidation, findSinglePost);
+//inputErrorManagementMiddleware можно один раз или надо два раза?
+postsRouter.put('/:id', inputIdValidation, inputErrorManagementMiddleware, postInputModelValidation, inputErrorManagementMiddleware, updatePost); //auth guarded
+postsRouter.delete('/:id', inputIdValidation, inputErrorManagementMiddleware, deletePost) //auth guarded
