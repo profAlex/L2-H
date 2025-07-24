@@ -6,11 +6,12 @@ import {
     getAllPosts,
     updatePost
 } from "./router descriptions/post-router-description";
+import {postInputModelValidation} from "../validation/PostInputModel-validation-middleware";
 
 export const postsRouter = Router();
 
 postsRouter.get('/', getAllPosts);
-postsRouter.post('/', createNewPost); //auth guarded
+postsRouter.post('/', postInputModelValidation, createNewPost); //auth guarded
 postsRouter.get('/:id', findSinglePost);
-postsRouter.put('/:id', updatePost); //auth guarded
+postsRouter.put('/:id', postInputModelValidation, updatePost); //auth guarded
 postsRouter.delete('/:id', deletePost) //auth guarded
