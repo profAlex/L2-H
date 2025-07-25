@@ -5,10 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setupApp = void 0;
 const express_1 = __importDefault(require("express"));
-const router_pathes_1 = require("./routes/router-pathes");
-const blogs_router_1 = require("./routes/blogs-router");
-const posts_router_1 = require("./routes/posts-router");
-const testing_router_1 = require("./routes/testing-router");
+const router_pathes_1 = require("./routers/router-pathes");
+const blogs_router_1 = require("./routers/blogs-router");
+const posts_router_1 = require("./routers/posts-router");
+const testing_router_1 = require("./routers/testing-router");
 const setupApp = (app) => {
     app.use(express_1.default.json());
     // ПРОВЕРИТЬ ЧТО МЫ МОЖЕМ БЕЗ ЭТОГО ОБЪЯВЛЕНИЯ?! Сможем ли

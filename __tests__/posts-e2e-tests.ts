@@ -35,7 +35,7 @@ describe("Test API for managing post inside blogs", () =>{
 
         const propertyCount = Object.keys(res.body).length;
 
-        console.log("FOR DEBUGGING: ", res.body);
+        // console.log("FOR DEBUGGING: ", res.body); // for debug purposes
 
         expect(propertyCount).toBe(6);
 

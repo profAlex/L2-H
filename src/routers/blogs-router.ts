@@ -15,6 +15,7 @@ import {inputIdValidation} from "../validation/id-input-validation-middleware";
 export const blogsRouter = Router();
 
 blogsRouter.get('/', getAllBlogs);
+// где обрабатывать массив errorMessages (который в функции inputErrorManagementMiddleware), где его органично выводить если он не пустой?
 blogsRouter.post('/', blogInputModelValidation, inputErrorManagementMiddleware, createNewBlog); //auth guarded
 blogsRouter.get('/:id', inputIdValidation, inputErrorManagementMiddleware, findSingleBlog);
 // inputErrorManagementMiddleware два раза или один? проверить!

@@ -77,6 +77,7 @@ exports.dataRepository = {
             bloggerPosts: []
         };
         nonDisclosableDatabase.bloggerRepository.push(newDatabaseEntry);
+        // console.log("ID Inside repository: ",newBlogEntry.id);
         return newBlogEntry;
     },
     findSingleBlog(blogId) {
@@ -88,6 +89,7 @@ exports.dataRepository = {
                 description: blogger.bloggerInfo.description,
                 websiteUrl: blogger.bloggerInfo.websiteUrl
             };
+            // console.log("ID inside finding function:", foundBlogger.id);
             return foundBlogger;
         }
         return undefined;
@@ -171,10 +173,14 @@ exports.dataRepository = {
     },
     deletePost(postId) {
         var _a;
-        const blogger = nonDisclosableDatabase.bloggerRepository.find((blogger) => blogger.bloggerInfo.id === postId);
+        const post = this.findSinglePost(postId);
+        if (!post) {
+            return undefined;
+        }
+        const blogIdFromPost = post.blogId;
+        const blogger = nonDisclosableDatabase.bloggerRepository.find((blogger) => blogger.bloggerInfo.id === blogIdFromPost);
         if (blogger && blogger.bloggerPosts) {
             let blogIndex = nonDisclosableDatabase.bloggerRepository.indexOf(blogger);
-            let post = this.findSinglePost(postId);
             if (blogIndex !== -1 && post) {
                 let postIndex = blogger.bloggerPosts.indexOf(post);
                 (_a = nonDisclosableDatabase.bloggerRepository[blogIndex].bloggerPosts) === null || _a === void 0 ? void 0 : _a.splice(postIndex, 1);
@@ -184,9 +190,12 @@ exports.dataRepository = {
         return undefined;
     },
     // *****************************
-    // метод для тестов
+    // методы для тестов
     // *****************************
     deleteAllBloggers() {
         nonDisclosableDatabase.bloggerRepository = [];
+    },
+    returnLength() {
+        return nonDisclosableDatabase.bloggerRepository.length;
     }
 };
