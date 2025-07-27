@@ -11,16 +11,17 @@ import {
 import {blogInputModelValidation} from "../validation/BlogInputModel-validation-middleware";
 import {inputErrorManagementMiddleware} from "../validation/error-management-validation-middleware";
 import {inputIdValidation} from "../validation/id-input-validation-middleware";
+import {superAdminGuardMiddleware} from "../validation/base64-auth-guard_middleware";
 
 export const blogsRouter = Router();
 
 blogsRouter.get('/', getAllBlogs);
 // где обрабатывать массив errorMessages (который в функции inputErrorManagementMiddleware), где его органично выводить если он не пустой?
-blogsRouter.post('/', blogInputModelValidation, inputErrorManagementMiddleware, createNewBlog); //auth guarded
+blogsRouter.post('/', superAdminGuardMiddleware, blogInputModelValidation, inputErrorManagementMiddleware, createNewBlog); //auth guarded
 blogsRouter.get('/:id', inputIdValidation, inputErrorManagementMiddleware, findSingleBlog);
 // inputErrorManagementMiddleware два раза или один? проверить!
-blogsRouter.put('/:id', inputIdValidation, inputErrorManagementMiddleware, blogInputModelValidation, inputErrorManagementMiddleware, updateBlog); //auth guarded
-blogsRouter.delete('/:id', inputIdValidation, inputErrorManagementMiddleware, deleteBlog); //auth guarded
+blogsRouter.put('/:id', superAdminGuardMiddleware, inputIdValidation, inputErrorManagementMiddleware, blogInputModelValidation, inputErrorManagementMiddleware, updateBlog); //auth guarded
+blogsRouter.delete('/:id', superAdminGuardMiddleware, inputIdValidation, inputErrorManagementMiddleware, deleteBlog); //auth guarded
 
 
 

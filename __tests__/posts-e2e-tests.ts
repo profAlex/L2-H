@@ -31,11 +31,9 @@ describe("Test API for managing post inside blogs", () =>{
 
     it("POST '/api/posts/' - should add a post to the repository", async() => {
 
-        const res = await request(testApp).post(`${POSTS_PATH}/`).send(correctPostInput);
+        const res = await request(testApp).post(`${POSTS_PATH}/`).set('Authorization', 'Basic ' + 'YWRtaW46cXdlcnR5').send(correctPostInput);
 
         const propertyCount = Object.keys(res.body).length;
-
-        // console.log("FOR DEBUGGING: ", res.body); // for debug purposes
 
         expect(propertyCount).toBe(6);
 
@@ -54,7 +52,16 @@ describe("Test API for managing post inside blogs", () =>{
         expect(res.status).toBe(HttpStatus.Created);
     });
 
-    it("GET '/api/posts/{id}' - should respond with a PostViewModel-formatted info about a requested post", async() => {
+    it("POST '/api/posts/' - shouldn't be able to add a post to the repository because of incorrect login/password pair", async() => {
+
+        const res = await request(testApp).post(`${POSTS_PATH}/`).set('Authorization', 'Basic ' + '111111').send(correctPostInput);
+        expect(res.status).toBe(HttpStatus.Unauthorized);
+
+        const anotherRes = await request(testApp).post(`${POSTS_PATH}/`).set('Authorization', '111111 ' + 'YWRtaW46cXdlcnR5').send(correctPostInput);
+        expect(anotherRes.status).toBe(HttpStatus.Unauthorized);
+    });
+
+    it("GET '/api/posts/{id}' - should find a post entry and respond with a PostViewModel-formatted info about a requested post", async() => {
 
         const res = await request(testApp).get(`${POSTS_PATH}/002_001`);
 
@@ -71,6 +78,12 @@ describe("Test API for managing post inside blogs", () =>{
         expect(res.status).toBe(HttpStatus.Ok);
     });
 
+    it("GET '/api/posts/{id}' - shouldn't be able to insert a post because of non-existent blog ID, should respond with proper error-return message", async() => {
+
+        const res = await request(testApp).get(`${POSTS_PATH}/0000`);
+        expect(res.status).toBe(HttpStatus.NotFound);
+    });
+
     it("PUT '/api/posts/{id}' - should update a post", async() => {
 
         const updatedPostInput: PostInputModel = {
@@ -80,7 +93,7 @@ describe("Test API for managing post inside blogs", () =>{
             blogId: "002"
         };
 
-        const res = await request(testApp).put(`${POSTS_PATH}/002_001`).send(updatedPostInput);
+        const res = await request(testApp).put(`${POSTS_PATH}/002_001`).set('Authorization', 'Basic ' + 'YWRtaW46cXdlcnR5').send(updatedPostInput);
         expect(res.status).toBe(HttpStatus.NoContent);
 
         const anotherResults = await request(testApp).get(`${POSTS_PATH}/002_001`);
@@ -97,13 +110,44 @@ describe("Test API for managing post inside blogs", () =>{
         expect(anotherResults.body).toHaveProperty('blogName', 'blogger_002');
     });
 
-    it("DELETE '/api/posts/{id}' - should delete a post", async() => {
-        // expect(dataRepository.returnLength()).toBe(3);
+    it("PUT '/api/posts/{id}' - shouldn't be able to update a post because of incorrect login/password pair", async() => {
 
-        const res = await request(testApp).delete(`${POSTS_PATH}/002_001`);
+        const updatedPostInput: PostInputModel = {
+            title: "post blog 001",
+            shortDescription: "OBNOVLENNII post - ni o 4em",
+            content: "Eto OBNOVLENNOE testovoe napolnenie posta 001_003",
+            blogId: "002"
+        };
+
+        const res = await request(testApp).put(`${POSTS_PATH}/002_001`).set('Authorization', 'Basic ' + '111111').send(updatedPostInput);
+        expect(res.status).toBe(HttpStatus.Unauthorized);
+
+        const anotherRes = await request(testApp).put(`${POSTS_PATH}/002_001`).set('Authorization', '111111 ' + 'YWRtaW46cXdlcnR5').send(updatedPostInput);
+        expect(anotherRes.status).toBe(HttpStatus.Unauthorized);
+    });
+
+    it("DELETE '/api/posts/{id}' - shouldn't be able to delete a post because of incorrect login/password pair", async() => {
+
+        const res = await request(testApp).delete(`${POSTS_PATH}/002_001`).set('Authorization', 'Basic ' + '111111');
+        expect(res.status).toBe(HttpStatus.Unauthorized);
+
+        const anotherRes = await request(testApp).delete(`${POSTS_PATH}/002_001`).set('Authorization', '111111 ' + 'YWRtaW46cXdlcnR5');
+        expect(anotherRes.status).toBe(HttpStatus.Unauthorized);
+    });
+
+    // .set('Authorization', 'Basic ' + 'YWRtaW46cXdlcnR5')
+    // const res = await request(testApp).post(`${BLOGS_PATH}/`).set('Authorization', 'Basic ' + '111111').send(correctBlogInput);
+    // expect(res.status).toBe(HttpStatus.Unauthorized);
+    //
+    // const anotherRes = await request(testApp).post(`${BLOGS_PATH}/`).set('Authorization', '111111 ' + 'YWRtaW46cXdlcnR5').send(correctBlogInput);
+    // expect(anotherRes.status).toBe(HttpStatus.Unauthorized);
+
+    it("DELETE '/api/posts/{id}' - should delete a post", async() => {
+
+        const res = await request(testApp).delete(`${POSTS_PATH}/002_001`).set('Authorization', 'Basic ' + 'YWRtaW46cXdlcnR5');
         expect(res.status).toBe(HttpStatus.NoContent);
 
-        const anotherResults = await request(testApp).get(`${POSTS_PATH}/002_001`);
+        const anotherResults = await request(testApp).get(`${POSTS_PATH}/002_001`).set('Authorization', 'Basic ' + 'YWRtaW46cXdlcnR5');
         expect(anotherResults.status).toBe(HttpStatus.NotFound);
     });
 
