@@ -4,24 +4,24 @@ import {body} from "express-validator";
 //         return Object.keys(bodyData).length === 3;
 //     }).withMessage("Amount of parameters of input blog entry is not sufficient or exceeds the required amount")
 
-const nameValidation = body("name")
-    .exists().withMessage("Field 'name' must be specified")
-    .isString().withMessage("Incorrect 'name' type (must be string)")
+const nameValidation = body('name')
+    .exists().withMessage('Field name must be specified')
+    .isString().withMessage('Incorrect name type (must be string)')
     .trim()
-    .isLength({min: 1, max: 15}).withMessage("Field's 'name' length must be between 1 and 15 symbols");
+    .isLength({min: 1, max: 15}).withMessage('Field\'s name length must be between 1 and 15 symbols');
 
-const descriptionValidation = body("description")
-    .exists().withMessage("Field 'description' must be specified")
-    .isString().withMessage("Incorrect 'description' type (must be string)")
+const descriptionValidation = body('description')
+    .exists().withMessage('Field description must be specified')
+    .isString().withMessage('Incorrect description type (must be string)')
     .trim()
-    .isLength({min: 1, max: 500}).withMessage("Field's 'description' length must be between 1 and 500 symbols");
+    .isLength({min: 1, max: 500}).withMessage('Field\'s description length must be between 1 and 500 symbols');
 
-const websiteUrlValidation = body("websiteUrl")
-    .exists().withMessage("Field 'websiteUrl' must be specified")
-    .isString().withMessage("Incorrect 'websiteUrl' type (must be string)")
+const websiteUrlValidation = body('websiteUrl')
+    .exists().withMessage('Field websiteUrl must be specified')
+    .isString().withMessage('Incorrect websiteUrl type (must be string)')
     .trim()
-    .isLength({min: 1, max: 100}).withMessage("Field's 'websiteUrl' length must be between 1 and 100 symbols")
-    .matches('^https://([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$').withMessage("Field 'websiteUrl' contains inappropriate web site");
+    .isLength({min: 1, max: 100}).withMessage('Field\'s websiteUrl length must be between 1 and 100 symbols')
+    .matches('^https://([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$').withMessage('Field websiteUrl contains inappropriate web site');
 
 export const blogInputModelValidation = [
     //keyParamsAmountValidation,
