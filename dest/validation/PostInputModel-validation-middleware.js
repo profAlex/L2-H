@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postInputModelValidation = void 0;
 const express_validator_1 = require("express-validator");
-const keyParamsAmountValidation = (0, express_validator_1.body)().custom((bodyData) => {
-    return Object.keys(bodyData).length === 4;
-}).withMessage("Amount of parameters of input post entry is not sufficient or exceeds the required amount");
+// const keyParamsAmountValidation = body().custom((bodyData)=>{
+//     return Object.keys(bodyData).length === 4;
+// }).withMessage("Amount of parameters of input post entry is not sufficient or exceeds the required amount")
 const titleValidation = (0, express_validator_1.body)("title")
     .exists().withMessage("Field 'title' must be specified")
     .isString().withMessage("Incorrect 'title' type (must be string)")
@@ -25,7 +25,7 @@ const blogIdValidation = (0, express_validator_1.body)("blogId")
     .isString().withMessage("Incorrect 'blogId' type (must be string)")
     .trim();
 exports.postInputModelValidation = [
-    keyParamsAmountValidation,
+    // keyParamsAmountValidation,
     titleValidation,
     shortDescriptionValidation,
     contentValidation,

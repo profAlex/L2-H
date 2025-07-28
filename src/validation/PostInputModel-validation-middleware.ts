@@ -1,8 +1,8 @@
 import {body} from "express-validator";
 
-const keyParamsAmountValidation = body().custom((bodyData)=>{
-    return Object.keys(bodyData).length === 4;
-}).withMessage("Amount of parameters of input post entry is not sufficient or exceeds the required amount")
+// const keyParamsAmountValidation = body().custom((bodyData)=>{
+//     return Object.keys(bodyData).length === 4;
+// }).withMessage("Amount of parameters of input post entry is not sufficient or exceeds the required amount")
 
 const titleValidation = body("title")
     .exists().withMessage("Field 'title' must be specified")
@@ -28,7 +28,7 @@ const blogIdValidation = body("blogId")
     .trim()
 
 export const postInputModelValidation = [
-    keyParamsAmountValidation,
+    // keyParamsAmountValidation,
     titleValidation,
     shortDescriptionValidation,
     contentValidation,
