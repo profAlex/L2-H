@@ -20,7 +20,7 @@ blogsRouter.get('/', getAllBlogs);
 blogsRouter.post('/', superAdminGuardMiddleware, blogInputModelValidation, inputErrorManagementMiddleware, createNewBlog); //auth guarded
 blogsRouter.get('/:id', inputIdValidation, inputErrorManagementMiddleware, findSingleBlog);
 // inputErrorManagementMiddleware два раза или один? проверить!
-blogsRouter.put('/:id', superAdminGuardMiddleware, inputIdValidation, inputErrorManagementMiddleware, blogInputModelValidation, inputErrorManagementMiddleware, updateBlog); //auth guarded
+blogsRouter.put('/:id', superAdminGuardMiddleware, inputIdValidation, inputErrorManagementMiddleware, blogInputModelValidation, /*inputErrorManagementMiddleware,*/ updateBlog); //auth guarded
 blogsRouter.delete('/:id', superAdminGuardMiddleware, inputIdValidation, inputErrorManagementMiddleware, deleteBlog); //auth guarded
 
 
