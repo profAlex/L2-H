@@ -22,7 +22,7 @@ export const inputErrorManagementMiddleware = (
 
     if (errors.length > 0) {
 
-        console.log(errors); //для отладки, иначе непонятно где смотреть ошибки в случае их возникновения
+        // console.log(errors); //для отладки, иначе непонятно где смотреть ошибки в случае их возникновения
 
         res.status(HttpStatus.BadRequest).json({ errorMessages: errors });
         return;
