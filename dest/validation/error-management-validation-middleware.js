@@ -6,8 +6,8 @@ const http_statuses_1 = require("../core/http-statuses");
 const formatErrors = (error) => {
     const expressError = error;
     return {
-        field: expressError.path,
         message: expressError.msg,
+        field: expressError.path,
     };
 };
 const inputErrorManagementMiddleware = (req, res, next) => {
