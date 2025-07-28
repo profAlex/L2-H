@@ -24,7 +24,7 @@ export const inputErrorManagementMiddleware = (
 
         // console.log(errors); //для отладки, иначе непонятно где смотреть ошибки в случае их возникновения
 
-        res.status(HttpStatus.BadRequest).json({ errorMessages: errors });
+        res.status(HttpStatus.BadRequest).json({ errorsMessages: errors });
         return;
     }
 
