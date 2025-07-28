@@ -17,7 +17,7 @@ export const blogsRouter = Router();
 
 blogsRouter.get('/', getAllBlogs);
 // где обрабатывать массив errorMessages (который в функции inputErrorManagementMiddleware), где его органично выводить если он не пустой?
-blogsRouter.post('/', superAdminGuardMiddleware, inputErrorManagementMiddleware, blogInputModelValidation, createNewBlog); //auth guarded
+blogsRouter.post('/', superAdminGuardMiddleware, blogInputModelValidation, inputErrorManagementMiddleware, createNewBlog); //auth guarded
 blogsRouter.get('/:id', inputIdValidation, inputErrorManagementMiddleware, findSingleBlog);
 // inputErrorManagementMiddleware два раза или один? проверить!
 blogsRouter.put('/:id', superAdminGuardMiddleware, inputIdValidation, /*inputErrorManagementMiddleware,*/ blogInputModelValidation, inputErrorManagementMiddleware, updateBlog); //auth guarded
