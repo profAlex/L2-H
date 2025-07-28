@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.blogInputModelValidation = void 0;
 const express_validator_1 = require("express-validator");
-const keyParamsAmountValidation = (0, express_validator_1.body)().custom((bodyData) => {
-    return Object.keys(bodyData).length === 3;
-}).withMessage("Amount of parameters of input blog entry is not sufficient or exceeds the required amount");
+// const keyParamsAmountValidation = body().custom((bodyData)=>{
+//         return Object.keys(bodyData).length === 3;
+//     }).withMessage("Amount of parameters of input blog entry is not sufficient or exceeds the required amount")
 const nameValidation = (0, express_validator_1.body)("name")
     .exists().withMessage("Field 'name' must be specified")
     .isString().withMessage("Incorrect 'name' type (must be string)")
