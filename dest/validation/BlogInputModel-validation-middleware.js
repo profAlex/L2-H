@@ -22,7 +22,7 @@ const websiteUrlValidation = (0, express_validator_1.body)("websiteUrl")
     .isLength({ min: 1, max: 100 }).withMessage("Field's 'websiteUrl' length must be between 1 and 100 symbols")
     .matches('^https://([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$').withMessage("Field 'websiteUrl' contains inappropriate web site");
 exports.blogInputModelValidation = [
-    keyParamsAmountValidation,
+    //keyParamsAmountValidation,
     nameValidation,
     descriptionValidation,
     websiteUrlValidation,

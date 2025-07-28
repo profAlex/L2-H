@@ -24,7 +24,7 @@ const websiteUrlValidation = body("websiteUrl")
     .matches('^https://([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$').withMessage("Field 'websiteUrl' contains inappropriate web site");
 
 export const blogInputModelValidation = [
-    keyParamsAmountValidation,
+    //keyParamsAmountValidation,
     nameValidation,
     descriptionValidation,
     websiteUrlValidation,
