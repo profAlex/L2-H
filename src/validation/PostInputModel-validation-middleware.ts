@@ -8,19 +8,19 @@ const titleValidation = body('title')
     .exists().withMessage('Field title must be specified')
     .isString().withMessage('Incorrect title type (must be string)')
     .trim()
-    .isLength({min: 0, max: 30}).withMessage('Field\'s title length must be between 0 and 30 symbols');
+    .isLength({min: 1, max: 30}).withMessage('Field\'s title length must be between 1 and 30 symbols');
 
 const shortDescriptionValidation = body('shortDescription')
     .exists().withMessage('Field shortDescription must be specified')
     .isString().withMessage('Incorrect shortDescription type (must be string)')
     .trim()
-    .isLength({min: 0, max: 100}).withMessage('Field\'s shortDescription length must be between 0 and 100 symbols');
+    .isLength({min: 1, max: 100}).withMessage('Field\'s shortDescription length must be between 1 and 100 symbols');
 
 const contentValidation = body('content')
     .exists().withMessage('Field content must be specified')
     .isString().withMessage('Incorrect content type (must be string)')
     .trim()
-    .isLength({min: 0, max: 1000}).withMessage('Field\'s content length must be between 0 and 1000 symbols');
+    .isLength({min: 1, max: 1000}).withMessage('Field\'s content length must be between 1 and 1000 symbols');
 
 const blogIdValidation = body('blogId')
     .exists().withMessage('Field blogId must be specified')
